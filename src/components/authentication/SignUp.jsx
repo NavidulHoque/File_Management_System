@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useFormik } from "formik";
 import { signUp } from "../../validation/validation";
 import {
@@ -8,14 +7,17 @@ import {
   sendEmailVerification,
   updateProfile
 } from "firebase/auth";
-import { Bounce, ToastContainer } from "react-toastify";
+import { Bounce } from "react-toastify";
 import { BeatLoader } from "react-spinners";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { register } from "../../features/slices/userRegistrationSlice";
 
 const SignUp = ({ toast }) => {
   const [loading, setLoading] = useState(false);
   const auth = getAuth();
+  const dispatch = useDispatch()
 
   const initialValues = {
     name: "",
@@ -60,7 +62,11 @@ const SignUp = ({ toast }) => {
                   progress: undefined,
                   theme: "light",
                   transition: Bounce,
-                });
+                })
+
+                dispatch(register({
+                  email: formik.values.email
+                }))
 
                 setLoading(false);
               })
@@ -119,7 +125,6 @@ const SignUp = ({ toast }) => {
   }
 
   return (
-    <>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-y-4 w-full font-robotoRegular">
 
         <h2 className="text-[20px] font-robotoBold">Create an Account</h2>
@@ -174,7 +179,6 @@ const SignUp = ({ toast }) => {
         <p className="text-slate-500">Already signed up? <Link to='/login' className="text-blue-600 underline">Sign In</Link></p>
 
       </form>
-    </>
   );
 };
 

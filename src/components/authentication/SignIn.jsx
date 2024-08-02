@@ -16,7 +16,7 @@ import { LogIn } from "../../features/slices/userLoginSlice";
 import { storeID } from "../../features/slices/setTimeOutSlice";
 
 const SignIn = ({ toast }) => {
-  const email = useSelector((state) => state.UserLogin.user.email);
+  const email = useSelector((state) => state.UserRegistration.user ? state.UserRegistration.user.email : null);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false)
@@ -45,20 +45,10 @@ const SignIn = ({ toast }) => {
       formik.values.password
     )
       .then(({ user }) => {
-        if (user.emailVerified) {
-          toast.success("Successfully Logged In", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
 
-          setLoading(false);
+        if (user.emailVerified) {
+          
+          setLoading(false)
 
           dispatch(
             LogIn({
@@ -66,14 +56,16 @@ const SignIn = ({ toast }) => {
               email: user.email,
               displayName: user.displayName,
             })
-          );
+          )
 
           const timeOutID = setTimeout(() => {
-            navigate("/");
-          }, 2500);
+            navigate("/")
+          }, 2000);
 
-          dispatch(storeID(timeOutID));
-        } else {
+          dispatch(storeID(timeOutID))
+        } 
+        
+        else {
           toast.error("Verify your email first", {
             position: "top-right",
             autoClose: 2000,
@@ -86,7 +78,7 @@ const SignIn = ({ toast }) => {
             transition: Bounce,
           });
 
-          setLoading(false);
+          setLoading(false)
         }
       })
 
@@ -104,13 +96,16 @@ const SignIn = ({ toast }) => {
         });
 
         setLoading(false);
-      });
+      })
   }
 
   function handleSendPasswordResetEmail() {
-    setLoading2(true)
 
-    sendPasswordResetEmail(auth, email)
+    if (email) {
+
+      setLoading2(true)
+
+      sendPasswordResetEmail(auth, email)
       .then(() => {
 
         toast.success("Password reset email sent", {
@@ -123,7 +118,7 @@ const SignIn = ({ toast }) => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-        });
+        })
 
         setLoading2(false)
       })
@@ -144,6 +139,23 @@ const SignIn = ({ toast }) => {
 
         setLoading2(false)
       })
+    }
+
+    else{
+
+      toast.error("Create an account first", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      })
+
+    }
   }
 
   return (
