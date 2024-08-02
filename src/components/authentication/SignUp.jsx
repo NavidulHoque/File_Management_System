@@ -166,6 +166,7 @@ const SignUp = ({ toast }) => {
         <button
           type="submit"
           className="hover:bg-black bg-[rgb(50,50,50)] text-white rounded-md py-2"
+          disabled={loading}
         >
           {loading ? <BeatLoader color="#fff" size={5} /> : "Sign Up"}
         </button>

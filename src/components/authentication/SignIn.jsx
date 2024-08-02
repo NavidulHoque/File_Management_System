@@ -3,19 +3,25 @@
 import { useFormik } from "formik";
 import { signIn } from "../../validation/validation";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-import { useState } from 'react';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
+import { useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { Bounce } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LogIn } from "../../features/slices/userLoginSlice";
 import { storeID } from "../../features/slices/setTimeOutSlice";
 
 const SignIn = ({ toast }) => {
-  const dispatch = useDispatch()
+  const email = useSelector((state) => state.UserLogin.user.email);
+  const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState("")
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const [loading2, setLoading2] = useState(false)
+  const navigate = useNavigate();
   const auth = getAuth();
 
   const initialValues = {
@@ -38,11 +44,8 @@ const SignIn = ({ toast }) => {
       formik.values.email,
       formik.values.password
     )
-      .then(({user}) => {
-
+      .then(({ user }) => {
         if (user.emailVerified) {
-          //signed in
-
           toast.success("Successfully Logged In", {
             position: "top-right",
             autoClose: 2000,
@@ -55,22 +58,22 @@ const SignIn = ({ toast }) => {
             transition: Bounce,
           });
 
-          setLoading(false)
-          dispatch(LogIn({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-        }))
+          setLoading(false);
+
+          dispatch(
+            LogIn({
+              id: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            })
+          );
 
           const timeOutID = setTimeout(() => {
-            navigate("/")
-          }, 2500)
+            navigate("/");
+          }, 2500);
 
-          dispatch(storeID(timeOutID))
-        }
-
-        else{
-          
+          dispatch(storeID(timeOutID));
+        } else {
           toast.error("Verify your email first", {
             position: "top-right",
             autoClose: 2000,
@@ -85,7 +88,6 @@ const SignIn = ({ toast }) => {
 
           setLoading(false);
         }
-
       })
 
       .catch(() => {
@@ -106,21 +108,48 @@ const SignIn = ({ toast }) => {
   }
 
   function handleSendPasswordResetEmail() {
-    sendPasswordResetEmail(auth, formik.values.email)
+    setLoading2(true)
+
+    sendPasswordResetEmail(auth, email)
       .then(() => {
-        // Password reset email sent!
-        // ..
+
+        toast.success("Password reset email sent", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+
+        setLoading2(false)
       })
+
       .catch(() => {
-        
-        
-      });
+
+        toast.error("Password reset email sending failed", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+
+        setLoading2(false)
+      })
   }
 
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="flex flex-col gap-y-4 w-full font-robotoRegular"
+      className="flex flex-col items-start gap-y-4 w-full font-robotoRegular"
     >
       <h2 className="text-[20px] font-robotoBold">
         Sign In and Explore the System
@@ -152,11 +181,18 @@ const SignIn = ({ toast }) => {
         <p className="text-red-500">{formik.errors.password}</p>
       )}
 
-      <p onClick={handleSendPasswordResetEmail} className="text-blue-600 underline cursor-pointer">Forget Password?</p>
+      <span
+        onClick={handleSendPasswordResetEmail}
+        className="text-blue-600 underline cursor-pointer justify-self-start"
+        disabled={loading2}
+      >
+        {loading2 ? <BeatLoader className="text-blue-600" size={5} /> : "Forget Password?"}
+      </span>
 
       <button
         type="submit"
-        className="hover:bg-black bg-[rgb(50,50,50)] text-white rounded-md py-2"
+        className="hover:bg-black bg-[rgb(50,50,50)] text-white rounded-md py-2 w-full"
+        disabled={loading}
       >
         {loading ? <BeatLoader color="#fff" size={5} /> : "Sign In"}
       </button>
@@ -167,7 +203,6 @@ const SignIn = ({ toast }) => {
           Sign Up
         </Link>
       </p>
-
     </form>
   );
 };
