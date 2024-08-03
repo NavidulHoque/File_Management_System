@@ -11,3 +11,7 @@ export const signIn = Yup.object({
     email: Yup.string().email().required("Please fill up your email"),
     password: Yup.string().required("Please fill up your password")
 })
+
+export const passwordReset = Yup.object({
+    email: Yup.string().email().required("Please fill up your email"),
+})

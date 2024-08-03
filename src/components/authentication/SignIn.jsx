@@ -3,24 +3,18 @@
 import { useFormik } from "formik";
 import { signIn } from "../../validation/validation";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { Bounce } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { LogIn } from "../../features/slices/userLoginSlice";
 import { storeID } from "../../features/slices/setTimeOutSlice";
 
 const SignIn = ({ toast }) => {
-  const email = useSelector((state) => state.UserRegistration.user ? state.UserRegistration.user.email : null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const [loading, setLoading] = useState(false)
-  const [loading2, setLoading2] = useState(false)
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -47,7 +41,7 @@ const SignIn = ({ toast }) => {
       .then(({ user }) => {
 
         if (user.emailVerified) {
-          
+
           setLoading(false)
 
           dispatch(
@@ -63,8 +57,8 @@ const SignIn = ({ toast }) => {
           }, 2000);
 
           dispatch(storeID(timeOutID))
-        } 
-        
+        }
+
         else {
           toast.error("Verify your email first", {
             position: "top-right",
@@ -97,65 +91,6 @@ const SignIn = ({ toast }) => {
 
         setLoading(false);
       })
-  }
-
-  function handleSendPasswordResetEmail() {
-
-    if (email) {
-
-      setLoading2(true)
-
-      sendPasswordResetEmail(auth, email)
-      .then(() => {
-
-        toast.success("Password reset email sent", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        })
-
-        setLoading2(false)
-      })
-
-      .catch(() => {
-
-        toast.error("Password reset email sending failed", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-
-        setLoading2(false)
-      })
-    }
-
-    else{
-
-      toast.error("Create an account first", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      })
-
-    }
   }
 
   return (
@@ -193,13 +128,12 @@ const SignIn = ({ toast }) => {
         <p className="text-red-500">{formik.errors.password}</p>
       )}
 
-      <span
-        onClick={handleSendPasswordResetEmail}
+      <Link
+        to='/passwordReset'
         className="text-blue-600 underline cursor-pointer justify-self-start"
-        disabled={loading2}
       >
-        {loading2 ? <BeatLoader className="text-blue-600" size={5} /> : "Forget Password?"}
-      </span>
+        Forget Password?
+      </Link>
 
       <button
         type="submit"
@@ -215,6 +149,7 @@ const SignIn = ({ toast }) => {
           Sign Up
         </Link>
       </p>
+
     </form>
   );
 };

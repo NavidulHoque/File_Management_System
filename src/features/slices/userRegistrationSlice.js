@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    user: JSON.parse(localStorage.getItem("user2")) || []
+    email: JSON.parse(localStorage.getItem("email")) || []
 }
 
 const userRegistrationSlice = createSlice({
@@ -9,8 +9,8 @@ const userRegistrationSlice = createSlice({
     initialState,
     reducers: {
         register: (state, action) => {
-           state.user = action.payload
-           localStorage.setItem("user2", JSON.stringify(state.user))
+           state.email = [...state.email, action.payload]
+           localStorage.setItem("email", JSON.stringify(state.email))
         }
     }
 })

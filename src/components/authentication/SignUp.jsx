@@ -64,9 +64,7 @@ const SignUp = ({ toast }) => {
                   transition: Bounce,
                 })
 
-                dispatch(register({
-                  email: formik.values.email
-                }))
+                dispatch(register(formik.values.email))
 
                 setLoading(false);
               })

@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 import Dashboard from './pages/dashboard/Dashboard';
 import LoggedInPages from "./PrivateRoute/LoggedInPages";
 import LoggedOutPages from "./PrivateRoute/LoggedOutPages";
+import PasswordReset from "./pages/authentication/PasswordReset";
 
 const App = () => {
   const router = createBrowserRouter(createRoutesFromChildren(
@@ -22,6 +23,7 @@ const App = () => {
       <Route element={<LoggedOutPages />}>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/registration" element={<Registration />}></Route>
+        <Route path="/passwordReset" element={<PasswordReset />}></Route>
       </Route>
 
     </Route>
