@@ -8,9 +8,9 @@ import { useFormik } from 'formik';
 import { passwordReset } from '../../validation/validation';
 import { Helmet } from 'react-helmet-async';
 
-const PasswordReset = ({ toast }) => {
+const PasswordReset = () => {
   const email = useSelector((state) => state.UserRegistration.email)
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   const auth = getAuth()
 
   const initialValues = {
@@ -23,11 +23,11 @@ const PasswordReset = ({ toast }) => {
     validationSchema: passwordReset
   })
 
-  function handlePasswordReset() {
-       
-    setLoading(true)
+  const handlePasswordReset = () => {
 
     if (email.includes(formik.values.email)) {
+
+      setLoading(true)
 
       sendPasswordResetEmail(auth, formik.values.email)
         .then(() => {
@@ -40,11 +40,11 @@ const PasswordReset = ({ toast }) => {
             pauseOnHover: false,
             draggable: true,
             progress: undefined,
-            theme: "light",
+            theme: "colored",
             transition: Bounce,
           })
 
-          setLoading(false);
+          setLoading(false)
         })
         .catch(() => {
 
@@ -56,7 +56,7 @@ const PasswordReset = ({ toast }) => {
             pauseOnHover: false,
             draggable: true,
             progress: undefined,
-            theme: "light",
+            theme: "colored",
             transition: Bounce,
           })
 
@@ -74,12 +74,11 @@ const PasswordReset = ({ toast }) => {
         pauseOnHover: false,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "colored",
         transition: Bounce,
       })
     }
 
-    setLoading(false)
   }
 
   return (
