@@ -4,7 +4,7 @@ import Navbar from './components/mainNavbar/Navbar';
 import { useSelector } from "react-redux";
 import CreateFolder from "./components/dashboard/navbar/CreateFolder"
 import CreateFile from "./components/dashboard/navbar/CreateFile.jsx"
-import Upload from "./components/dashboard/navbar/Upload.jsx";
+import UploadFile from "./components/dashboard/navbar/UploadFile.jsx";
 
 const RootLayout = () => {
   const createFileState = useSelector((state) => state.OpenOfCreationAndUploadComp.createFile)
@@ -18,7 +18,7 @@ const RootLayout = () => {
 
         {createFileState && <CreateFile createFileState={createFileState} />}
         {createFolderState && <CreateFolder createFolderState={createFolderState} />}
-        {uploadState && <Upload uploadState={uploadState} />}
+        {uploadState && <UploadFile uploadState={uploadState} />}
 
         <Navbar />
         <Outlet />

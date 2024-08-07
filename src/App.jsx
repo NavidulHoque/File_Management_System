@@ -3,10 +3,13 @@ import RootLayout from "./RootLayout"
 import Login from './pages/authentication/Login';
 import Registration from './pages/authentication/Registration';
 import Home from './pages/home/Home';
-import Dashboard from './pages/dashboard/Dashboard';
 import LoggedInPages from "./PrivateRoute/LoggedInPages";
 import LoggedOutPages from "./PrivateRoute/LoggedOutPages";
 import PasswordReset from "./pages/authentication/PasswordReset";
+import DashboardLayout from "./pages/dashboard/DashboardLayout";
+import InsideFolder from "./pages/dashboard/InsideFolder";
+import RootFolder from "./pages/dashboard/RootFolder";
+import InsideFile from "./pages/dashboard/InsideFile";
 
 const App = () => {
   const router = createBrowserRouter(createRoutesFromChildren(
@@ -15,7 +18,11 @@ const App = () => {
         <Route path="/" element={<Home />}></Route>
 
         <Route element={<LoggedInPages />}>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<RootFolder />}></Route>
+            <Route path="/dashboard/folder/:folderID" element={<InsideFolder />}></Route>
+          </Route>
+          <Route path="/dashboard/file/:fileID" element={<InsideFile />}></Route>
         </Route>
 
       </Route>

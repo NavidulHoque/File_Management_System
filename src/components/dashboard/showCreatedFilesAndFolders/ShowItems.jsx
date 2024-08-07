@@ -1,6 +1,6 @@
 import ShowItem from "./ShowItem"
-
 /* eslint-disable react/prop-types */
+
 const ShowItems = ({ title, items }) => {
     return (
         <div className="flex flex-col gap-y-2">
@@ -10,7 +10,7 @@ const ShowItems = ({ title, items }) => {
 
             <div className="flex flex-wrap gap-x-5 px-8">
                 {items.map((item, i) => (
-                    <ShowItem key={i} item={item} />
+                    <ShowItem key={i} item={item} title={title} />
                 ))}
             </div>
         </div>
